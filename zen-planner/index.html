@@ -1,1 +1,1346 @@
-))))))
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zen Planner – Digital Horizontal Undated Planner</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f7f3ea;
+      color: #222;
+      height: 100vh;
+      display: flex;
+    }
+
+    .app-shell {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 220px;
+      background: #111;
+      color: #f5f5f5;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    .nav-group-title {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      opacity: 0.6;
+      margin-bottom: 6px;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-item {
+      padding: 8px 10px;
+      border-radius: 4px;
+      font-size: 13px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-item span.label {
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 11px;
+    }
+
+    .nav-item.active {
+      background: #f7f3ea;
+      color: #111;
+      border-color: #f7f3ea;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      font-size: 10px;
+      opacity: 0.6;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 24px 24px 24px;
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    .top-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .month-index {
+      display: flex;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      border-bottom: 1px solid #ccc6b6;
+      padding-bottom: 4px;
+    }
+
+    .month-pill {
+      padding: 2px 6px 4px 6px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .month-pill.active {
+      background: #111;
+      color: #f7f3ea;
+    }
+
+    .page-title-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .page-title-main {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .page-subtitle {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      opacity: 0.7;
+    }
+
+    .page-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 11px;
+    }
+
+    .pill-select {
+      display: inline-flex;
+      gap: 4px;
+      border-radius: 999px;
+      padding: 2px;
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .pill-option {
+      padding: 2px 8px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .pill-option.active {
+      background: #111;
+      color: #f7f3ea;
+    }
+
+    .canvas {
+      flex: 1;
+      border-radius: 10px;
+      background: #fdfaf4;
+      border: 1px solid #dcd0b4;
+      padding: 20px 24px;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .page-section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-bottom: 4px;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 16px;
+    }
+
+    .grid-three {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .panel {
+      border: 1px solid #ddd1b8;
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: #fefbf6;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+
+    .panel-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .panel-sub {
+      font-size: 10px;
+      opacity: 0.7;
+    }
+
+    label.field-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      border-radius: 4px;
+      border: 1px solid #d5c7aa;
+      padding: 4px 6px;
+      font-size: 12px;
+      background: #fdfaf4;
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      margin-bottom: 2px;
+    }
+
+    .checkbox-row input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+    }
+
+    .lines-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .line-item {
+      border-bottom: 1px solid #e0d2b6;
+      padding-bottom: 4px;
+      font-size: 12px;
+      min-height: 18px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .line-item input[type="text"] {
+      border: none;
+      border-bottom: 1px solid transparent;
+      border-radius: 0;
+      padding-left: 0;
+      background: transparent;
+    }
+
+    .line-item input[type="text"]:focus {
+      outline: none;
+      border-bottom-color: #b69a60;
+    }
+
+    .hour-grid {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      row-gap: 2px;
+      column-gap: 8px;
+      font-size: 11px;
+    }
+
+    .hour-label {
+      text-align: right;
+      padding-right: 4px;
+      opacity: 0.7;
+    }
+
+    .hour-cell {
+      border-bottom: 1px solid #e0d2b6;
+      min-height: 16px;
+    }
+
+    .hour-cell input[type="text"] {
+      border: none;
+      border-radius: 0;
+      padding: 0;
+      font-size: 11px;
+      background: transparent;
+      width: 100%;
+    }
+
+    .habit-grid {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(7, 1fr);
+      font-size: 10px;
+      border-top: 1px solid #e0d2b6;
+      border-left: 1px solid #e0d2b6;
+      margin-top: 4px;
+    }
+
+    .habit-grid div {
+      border-right: 1px solid #e0d2b6;
+      border-bottom: 1px solid #e0d2b6;
+      padding: 3px 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .habit-grid-header {
+      background: #f4ebd8;
+      font-weight: 600;
+    }
+
+    .habit-name-cell input[type="text"] {
+      border: none;
+      border-radius: 0;
+      padding: 0;
+      font-size: 10px;
+      background: transparent;
+      width: 100%;
+    }
+
+    .quick-checks {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .quick-check {
+      border-radius: 6px;
+      border: 1px solid #e0d2b6;
+      padding: 4px 6px;
+      font-size: 10px;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .quick-check input[type="checkbox"] {
+      margin-top: 3px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .small-input-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 4px;
+      font-size: 11px;
+    }
+
+    .small-input-row input[type="text"] {
+      width: auto;
+      min-width: 120px;
+    }
+
+    .tag {
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid #d5c7aa;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .info-text {
+      font-size: 11px;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 960px) {
+      .sidebar {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div>
+        <div class="brand">Zen Planner</div>
+        <div class="brand-sub">mirzakhani studios</div>
+      </div>
+
+      <div>
+        <div class="nav-group-title">Navigation</div>
+        <div class="sidebar-nav">
+          <div class="nav-item active" data-page="cover"><span class="label">Cover</span></div>
+          <div class="nav-item" data-page="yearly"><span class="label">Yearly</span></div>
+          <div class="nav-item" data-page="monthly"><span class="label">Monthly</span></div>
+          <div class="nav-item" data-page="weekly"><span class="label">Weekly</span></div>
+          <div class="nav-item" data-page="daily"><span class="label">Daily</span></div>
+          <div class="nav-item" data-page="notes"><span class="label">Notes</span></div>
+          <div class="nav-item" data-page="index"><span class="label">Index</span></div>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        Digital Horizontal Undated Planner
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="top-bar">
+        <div class="page-title-row">
+          <div>
+            <div class="page-title-main" id="pageTitle">Zen Planner</div>
+            <div class="page-subtitle" id="pageSubtitle">Digital Horizontal Undated Planner</div>
+          </div>
+          <div class="page-controls">
+            <div class="small-input-row">
+              <label class="field-label" for="globalYearInput">Year</label>
+              <input type="text" id="globalYearInput" data-storage-key="global.year" placeholder="2025" />
+            </div>
+            <div class="small-input-row">
+              <label class="field-label" for="globalDateInput">Date focus</label>
+              <input type="date" id="globalDateInput" data-storage-key="global.date" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="canvas" id="pageCanvas">
+        <!-- Cover Page -->
+        <div class="page" data-page-id="cover">
+          <div style="margin:auto; text-align:center; max-width:480px;">
+            <div class="page-subtitle">The Digital Horizontal Planner</div>
+            <h1 style="margin:12px 0 4px; letter-spacing:0.18em; text-transform:uppercase; font-size:26px;">Zen Planner</h1>
+            <div class="page-subtitle">mirzakhani studios</div>
+            <p class="info-text" style="margin-top:18px;">
+              Use the sidebar to navigate between Yearly, Monthly, Weekly, Daily, Notes and Index views.
+              All fields are undated; you decide how to use each page. Your entries are saved locally in this browser.
+            </p>
+            <div class="panel" style="margin-top:24px; text-align:left;">
+              <div class="panel-header">
+                <div class="panel-title">Intent</div>
+              </div>
+              <label class="field-label" for="cover-intent">Why are you using this planner?</label>
+              <textarea id="cover-intent" data-storage-key="cover.intent"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Yearly Page -->
+        <div class="page hidden" data-page-id="yearly">
+          <div class="grid-three">
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">Year at a glance</div>
+                <div class="panel-sub">Mini calendars</div>
+              </div>
+              <div class="info-text">
+                Light structure emulating 12 tiny monthly grids. Use the notes areas below each month.
+              </div>
+              <div class="grid-three" style="margin-top:8px;">
+                <div>
+                  <label class="field-label">Jan</label>
+                  <textarea data-storage-key="year.glance.jan"></textarea>
+                </div>
+                <div>
+                  <label class="field-label">Feb</label>
+                  <textarea data-storage-key="year.glance.feb"></textarea>
+                </div>
+                <div>
+                  <label class="field-label">Mar</label>
+                  <textarea data-storage-key="year.glance.mar"></textarea>
+                </div>
+                <div>
+                  <label class="field-label">Apr</label>
+                  <textarea data-storage-key="year.glance.apr"></textarea>
+                </div>
+                <div>
+                  <label class="field-label">May</label>
+                  <textarea data-storage-key="year.glance.may"></textarea>
+                </div>
+                <div>
+                  <label class="field-label">Jun</label>
+                  <textarea data-storage-key="year.glance.jun"></textarea>
+                </div>
+                <div>
+                  <label class="field-label">Jul</label>
+                  <textarea data-storage-key="year.glance.jul"></textarea>
+                </div>
+                <div>
+                  <label class="field-label">Aug</label>
+                  <textarea data-storage-key="year.glance.aug"></textarea>
+                </div>
+                <div>
+                  <label class="field-label">Sep</label>
+                  <textarea data-storage-key="year.glance.sep"></textarea>
+                </div>
+                <div>
+                  <label class="field-label">Oct</label>
+                  <textarea data-storage-key="year.glance.oct"></textarea>
+                </div>
+                <div>
+                  <label class="field-label">Nov</label>
+                  <textarea data-storage-key="year.glance.nov"></textarea>
+                </div>
+                <div>
+                  <label class="field-label">Dec</label>
+                  <textarea data-storage-key="year.glance.dec"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">Yearly To-Do</div>
+                <div class="panel-sub">Two-column list</div>
+              </div>
+              <div class="grid-two" style="grid-template-columns:1fr 1fr;">
+                <div class="lines-list">
+                  <!-- left column 10 items -->
+                  <div class="checkbox-row"><input type="checkbox" data-storage-key="year.todo.1.check" /><input type="text" data-storage-key="year.todo.1.text" placeholder="" /></div>
+                  <div class="checkbox-row"><input type="checkbox" data-storage-key="year.todo.2.check" /><input type="text" data-storage-key="year.todo.2.text" /></div>
+                  <div class="checkbox-row"><input type="checkbox" data-storage-key="year.todo.3.check" /><input type="text" data-storage-key="year.todo.3.text" /></div>
+                  <div class="checkbox-row"><input type="checkbox" data-storage-key="year.todo.4.check" /><input type="text" data-storage-key="year.todo.4.text" /></div>
+                  <div class="checkbox-row"><input type="checkbox" data-storage-key="year.todo.5.check" /><input type="text" data-storage-key="year.todo.5.text" /></div>
+                </div>
+                <div class="lines-list">
+                  <!-- right column 10 items -->
+                  <div class="checkbox-row"><input type="checkbox" data-storage-key="year.todo.6.check" /><input type="text" data-storage-key="year.todo.6.text" /></div>
+                  <div class="checkbox-row"><input type="checkbox" data-storage-key="year.todo.7.check" /><input type="text" data-storage-key="year.todo.7.text" /></div>
+                  <div class="checkbox-row"><input type="checkbox" data-storage-key="year.todo.8.check" /><input type="text" data-storage-key="year.todo.8.text" /></div>
+                  <div class="checkbox-row"><input type="checkbox" data-storage-key="year.todo.9.check" /><input type="text" data-storage-key="year.todo.9.text" /></div>
+                  <div class="checkbox-row"><input type="checkbox" data-storage-key="year.todo.10.check" /><input type="text" data-storage-key="year.todo.10.text" /></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">Meal Plan</div>
+                <div class="panel-sub">Weekly grid</div>
+              </div>
+              <div class="habit-grid" style="grid-template-columns:1.3fr repeat(7, 1fr); font-size:9px;">
+                <div class="habit-grid-header">Meal</div>
+                <div class="habit-grid-header">Mon</div>
+                <div class="habit-grid-header">Tue</div>
+                <div class="habit-grid-header">Wed</div>
+                <div class="habit-grid-header">Thu</div>
+                <div class="habit-grid-header">Fri</div>
+                <div class="habit-grid-header">Sat</div>
+                <div class="habit-grid-header">Sun</div>
+
+                <!-- rows: Breakfast, Lunch, Dinner, Snacks -->
+                <div class="habit-name-cell"><input type="text" value="Breakfast" data-storage-key="year.meal.row1.name" /></div>
+                <div><input type="text" data-storage-key="year.meal.row1.mon" /></div>
+                <div><input type="text" data-storage-key="year.meal.row1.tue" /></div>
+                <div><input type="text" data-storage-key="year.meal.row1.wed" /></div>
+                <div><input type="text" data-storage-key="year.meal.row1.thu" /></div>
+                <div><input type="text" data-storage-key="year.meal.row1.fri" /></div>
+                <div><input type="text" data-storage-key="year.meal.row1.sat" /></div>
+                <div><input type="text" data-storage-key="year.meal.row1.sun" /></div>
+
+                <div class="habit-name-cell"><input type="text" value="Lunch" data-storage-key="year.meal.row2.name" /></div>
+                <div><input type="text" data-storage-key="year.meal.row2.mon" /></div>
+                <div><input type="text" data-storage-key="year.meal.row2.tue" /></div>
+                <div><input type="text" data-storage-key="year.meal.row2.wed" /></div>
+                <div><input type="text" data-storage-key="year.meal.row2.thu" /></div>
+                <div><input type="text" data-storage-key="year.meal.row2.fri" /></div>
+                <div><input type="text" data-storage-key="year.meal.row2.sat" /></div>
+                <div><input type="text" data-storage-key="year.meal.row2.sun" /></div>
+
+                <div class="habit-name-cell"><input type="text" value="Dinner" data-storage-key="year.meal.row3.name" /></div>
+                <div><input type="text" data-storage-key="year.meal.row3.mon" /></div>
+                <div><input type="text" data-storage-key="year.meal.row3.tue" /></div>
+                <div><input type="text" data-storage-key="year.meal.row3.wed" /></div>
+                <div><input type="text" data-storage-key="year.meal.row3.thu" /></div>
+                <div><input type="text" data-storage-key="year.meal.row3.fri" /></div>
+                <div><input type="text" data-storage-key="year.meal.row3.sat" /></div>
+                <div><input type="text" data-storage-key="year.meal.row3.sun" /></div>
+
+                <div class="habit-name-cell"><input type="text" value="Snacks" data-storage-key="year.meal.row4.name" /></div>
+                <div><input type="text" data-storage-key="year.meal.row4.mon" /></div>
+                <div><input type="text" data-storage-key="year.meal.row4.tue" /></div>
+                <div><input type="text" data-storage-key="year.meal.row4.wed" /></div>
+                <div><input type="text" data-storage-key="year.meal.row4.thu" /></div>
+                <div><input type="text" data-storage-key="year.meal.row4.fri" /></div>
+                <div><input type="text" data-storage-key="year.meal.row4.sat" /></div>
+                <div><input type="text" data-storage-key="year.meal.row4.sun" /></div>
+              </div>
+
+              <div style="margin-top:8px;" class="panel-sub">Cheat sheets & examples</div>
+              <textarea data-storage-key="year.cheats" placeholder="Use this area for cheat sheets, reference notes or example layouts."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Monthly Page -->
+        <div class="page hidden" data-page-id="monthly">
+          <div class="page-section-title">Monthly Overview</div>
+          <div class="grid-two">
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">Month of</div>
+              </div>
+              <input type="text" id="monthNameDisplay" placeholder="Will auto-fill" readonly />
+
+              <div class="panel-sub" style="margin-top:12px;">Calendar grid (Mon–Sun)</div>
+              <textarea data-storage-key="month.calendarNotes" placeholder="Use this area as your undated monthly grid or list of important dates."></textarea>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">Monthly Habit Tracker</div>
+                <div class="panel-sub">wk1–wk5</div>
+              </div>
+              <!-- 7 columns total: Habit + (wk1–wk5) + Notes -->
+              <div class="habit-grid" style="font-size:9px; grid-template-columns:1.5fr repeat(6, 1fr);">
+                <div class="habit-grid-header">Habit</div>
+                <div class="habit-grid-header">wk1</div>
+                <div class="habit-grid-header">wk2</div>
+                <div class="habit-grid-header">wk3</div>
+                <div class="habit-grid-header">wk4</div>
+                <div class="habit-grid-header">wk5</div>
+                <div class="habit-grid-header">Notes</div>
+
+                <!-- few habit rows -->
+                <div class="habit-name-cell"><input type="text" data-storage-key="month.habit.1.name" placeholder="Habit" /></div>
+                <div><input type="checkbox" data-storage-key="month.habit.1.w1" /></div>
+                <div><input type="checkbox" data-storage-key="month.habit.1.w2" /></div>
+                <div><input type="checkbox" data-storage-key="month.habit.1.w3" /></div>
+                <div><input type="checkbox" data-storage-key="month.habit.1.w4" /></div>
+                <div><input type="checkbox" data-storage-key="month.habit.1.w5" /></div>
+                <div><input type="text" data-storage-key="month.habit.1.note" /></div>
+
+                <div class="habit-name-cell"><input type="text" data-storage-key="month.habit.2.name" placeholder="Habit" /></div>
+                <div><input type="checkbox" data-storage-key="month.habit.2.w1" /></div>
+                <div><input type="checkbox" data-storage-key="month.habit.2.w2" /></div>
+                <div><input type="checkbox" data-storage-key="month.habit.2.w3" /></div>
+                <div><input type="checkbox" data-storage-key="month.habit.2.w4" /></div>
+                <div><input type="checkbox" data-storage-key="month.habit.2.w5" /></div>
+                <div><input type="text" data-storage-key="month.habit.2.note" /></div>
+
+                <div class="habit-name-cell"><input type="text" data-storage-key="month.habit.3.name" placeholder="Habit" /></div>
+                <div><input type="checkbox" data-storage-key="month.habit.3.w1" /></div>
+                <div><input type="checkbox" data-storage-key="month.habit.3.w2" /></div>
+                <div><input type="checkbox" data-storage-key="month.habit.3.w3" /></div>
+                <div><input type="checkbox" data-storage-key="month.habit.3.w4" /></div>
+                <div><input type="checkbox" data-storage-key="month.habit.3.w5" /></div>
+                <div><input type="text" data-storage-key="month.habit.3.note" /></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-three" style="margin-top:14px;">
+            <div class="panel">
+              <div class="panel-title">Goals</div>
+              <textarea data-storage-key="month.goals"></textarea>
+            </div>
+            <div class="panel">
+              <div class="panel-title">Priorities</div>
+              <textarea data-storage-key="month.priorities"></textarea>
+            </div>
+            <div class="panel">
+              <div class="panel-title">Gratitude / Notes</div>
+              <textarea data-storage-key="month.gratitude"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weekly Page -->
+        <div class="page hidden" data-page-id="weekly">
+          <div class="page-section-title">Weekly Planner</div>
+          <div class="grid-two">
+            <!-- Weekly spread -->
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <div class="panel-title">Week</div>
+                  <div class="panel-sub" id="weeklyWeekLabel">&nbsp;</div>
+                </div>
+                <div class="panel-sub" id="weeklyRangeLabel">&nbsp;</div>
+              </div>
+              <div class="grid-seven" style="display:grid; grid-template-columns:repeat(7, 1fr); gap:8px; margin-top:10px; font-size:11px;">
+                <!-- Days columns -->
+                <div class="panel" style="padding:6px;">
+                  <div class="panel-title">Mon</div>
+                  <label class="field-label">Highlight</label>
+                  <input type="text" data-storage-key="week.mon.highlight" />
+                  <label class="field-label" style="margin-top:4px;">Feeling</label>
+                  <input type="text" data-storage-key="week.mon.feeling" />
+                  <label class="field-label" style="margin-top:4px;">Notes</label>
+                  <textarea data-storage-key="week.mon.notes"></textarea>
+                </div>
+                <div class="panel" style="padding:6px;">
+                  <div class="panel-title">Tue</div>
+                  <label class="field-label">Highlight</label>
+                  <input type="text" data-storage-key="week.tue.highlight" />
+                  <label class="field-label" style="margin-top:4px;">Feeling</label>
+                  <input type="text" data-storage-key="week.tue.feeling" />
+                  <label class="field-label" style="margin-top:4px;">Notes</label>
+                  <textarea data-storage-key="week.tue.notes"></textarea>
+                </div>
+                <div class="panel" style="padding:6px;">
+                  <div class="panel-title">Wed</div>
+                  <label class="field-label">Highlight</label>
+                  <input type="text" data-storage-key="week.wed.highlight" />
+                  <label class="field-label" style="margin-top:4px;">Feeling</label>
+                  <input type="text" data-storage-key="week.wed.feeling" />
+                  <label class="field-label" style="margin-top:4px;">Notes</label>
+                  <textarea data-storage-key="week.wed.notes"></textarea>
+                </div>
+                <div class="panel" style="padding:6px;">
+                  <div class="panel-title">Thu</div>
+                  <label class="field-label">Highlight</label>
+                  <input type="text" data-storage-key="week.thu.highlight" />
+                  <label class="field-label" style="margin-top:4px;">Feeling</label>
+                  <input type="text" data-storage-key="week.thu.feeling" />
+                  <label class="field-label" style="margin-top:4px;">Notes</label>
+                  <textarea data-storage-key="week.thu.notes"></textarea>
+                </div>
+                <div class="panel" style="padding:6px;">
+                  <div class="panel-title">Fri</div>
+                  <label class="field-label">Highlight</label>
+                  <input type="text" data-storage-key="week.fri.highlight" />
+                  <label class="field-label" style="margin-top:4px;">Feeling</label>
+                  <input type="text" data-storage-key="week.fri.feeling" />
+                  <label class="field-label" style="margin-top:4px;">Notes</label>
+                  <textarea data-storage-key="week.fri.notes"></textarea>
+                </div>
+                <div class="panel" style="padding:6px;">
+                  <div class="panel-title">Sat</div>
+                  <label class="field-label">Highlight</label>
+                  <input type="text" data-storage-key="week.sat.highlight" />
+                  <label class="field-label" style="margin-top:4px;">Feeling</label>
+                  <input type="text" data-storage-key="week.sat.feeling" />
+                  <label class="field-label" style="margin-top:4px;">Notes</label>
+                  <textarea data-storage-key="week.sat.notes"></textarea>
+                </div>
+                <div class="panel" style="padding:6px;">
+                  <div class="panel-title">Sun</div>
+                  <label class="field-label">Highlight</label>
+                  <input type="text" data-storage-key="week.sun.highlight" />
+                  <label class="field-label" style="margin-top:4px;">Feeling</label>
+                  <input type="text" data-storage-key="week.sun.feeling" />
+                  <label class="field-label" style="margin-top:4px;">Notes</label>
+                  <textarea data-storage-key="week.sun.notes"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Weekly focus / quadrant -->
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">Weekly Focus</div>
+                <div class="panel-sub">Week of</div>
+              </div>
+              <input type="text" data-storage-key="week.focusOf" placeholder="Week of" />
+
+              <div class="grid-two" style="margin-top:10px;">
+                <div>
+                  <div class="panel-sub">04:00 – 03:00</div>
+                  <div class="hour-grid" id="weeklyHourGrid"></div>
+                </div>
+                <div>
+                  <div class="panel-sub">Top tasks</div>
+                  <div class="lines-list">
+                    <div class="checkbox-row"><input type="checkbox" data-storage-key="week.top.1.check" /><input type="text" data-storage-key="week.top.1.text" /></div>
+                    <div class="checkbox-row"><input type="checkbox" data-storage-key="week.top.2.check" /><input type="text" data-storage-key="week.top.2.text" /></div>
+                    <div class="checkbox-row"><input type="checkbox" data-storage-key="week.top.3.check" /><input type="text" data-storage-key="week.top.3.text" /></div>
+                  </div>
+
+                  <div class="panel-sub" style="margin-top:10px;">This week's wins</div>
+                  <textarea data-storage-key="week.wins"></textarea>
+
+                  <div class="panel-sub" style="margin-top:10px;">Eisenhower matrix</div>
+                  <div class="grid-two" style="grid-template-columns:1fr 1fr; gap:6px; font-size:10px;">
+                    <div class="panel">
+                      <div class="panel-title">Urgent & Important</div>
+                      <textarea data-storage-key="week.quadrant.ui"></textarea>
+                    </div>
+                    <div class="panel">
+                      <div class="panel-title">Not Urgent & Important</div>
+                      <textarea data-storage-key="week.quadrant.nui"></textarea>
+                    </div>
+                    <div class="panel">
+                      <div class="panel-title">Urgent & Not Important</div>
+                      <textarea data-storage-key="week.quadrant.uni"></textarea>
+                    </div>
+                    <div class="panel">
+                      <div class="panel-title">Not Urgent & Not Important</div>
+                      <textarea data-storage-key="week.quadrant.nuni"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Daily Page -->
+        <div class="page hidden" data-page-id="daily">
+          <div class="page-section-title">Daily Planner</div>
+          <div class="small-input-row">
+            <label class="field-label" for="daily-date">Date</label>
+            <input type="date" id="daily-date" disabled />
+            <span class="tag">wk1</span>
+            <span class="tag">wk2</span>
+            <span class="tag">wk3</span>
+            <span class="tag">wk4</span>
+            <span class="tag">wk5</span>
+          </div>
+
+          <div class="grid-two">
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">Focus</div>
+              </div>
+              <input type="text" data-storage-key="day.focus" />
+
+              <div class="panel-header" style="margin-top:10px;">
+                <div class="panel-title">Top Tasks</div>
+              </div>
+              <div class="lines-list">
+                <div class="checkbox-row"><input type="checkbox" data-storage-key="day.top.1.check" /><input type="text" data-storage-key="day.top.1.text" /></div>
+                <div class="checkbox-row"><input type="checkbox" data-storage-key="day.top.2.check" /><input type="text" data-storage-key="day.top.2.text" /></div>
+                <div class="checkbox-row"><input type="checkbox" data-storage-key="day.top.3.check" /><input type="text" data-storage-key="day.top.3.text" /></div>
+                <div class="checkbox-row"><input type="checkbox" data-storage-key="day.top.4.check" /><input type="text" data-storage-key="day.top.4.text" /></div>
+                <div class="checkbox-row"><input type="checkbox" data-storage-key="day.top.5.check" /><input type="text" data-storage-key="day.top.5.text" /></div>
+              </div>
+
+              <div class="panel-header" style="margin-top:10px;">
+                <div class="panel-title">Notes / Reflection</div>
+              </div>
+              <textarea data-storage-key="day.notes"></textarea>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">Schedule 04:00 – 03:00</div>
+              </div>
+              <div class="hour-grid" id="dailyHourGrid"></div>
+
+              <div class="panel-header" style="margin-top:10px;">
+                <div class="panel-title">Habits</div>
+              </div>
+              <div class="lines-list">
+                <div class="checkbox-row"><input type="checkbox" data-storage-key="day.habit.1.check" /><input type="text" data-storage-key="day.habit.1.text" placeholder="Habit" /></div>
+                <div class="checkbox-row"><input type="checkbox" data-storage-key="day.habit.2.check" /><input type="text" data-storage-key="day.habit.2.text" placeholder="Habit" /></div>
+                <div class="checkbox-row"><input type="checkbox" data-storage-key="day.habit.3.check" /><input type="text" data-storage-key="day.habit.3.text" placeholder="Habit" /></div>
+              </div>
+
+              <div class="panel-header" style="margin-top:10px;">
+                <div class="panel-title">Quick Checks</div>
+              </div>
+              <div class="quick-checks">
+                <div class="quick-check">Water<br /><input type="checkbox" data-storage-key="day.quick.water" /></div>
+                <div class="quick-check">Mood<br /><input type="checkbox" data-storage-key="day.quick.mood" /></div>
+                <div class="quick-check">Movement<br /><input type="checkbox" data-storage-key="day.quick.move" /></div>
+                <div class="quick-check">Meals<br /><input type="checkbox" data-storage-key="day.quick.meals" /></div>
+                <div class="quick-check">Sleep<br /><input type="checkbox" data-storage-key="day.quick.sleep" /></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notes Page -->
+        <div class="page hidden" data-page-id="notes">
+          <div class="page-section-title">Notes / Cheat Sheets</div>
+          <div class="panel">
+            <textarea data-storage-key="notes.main" style="min-height:320px;" placeholder="Use this space for blank notes, cheat sheets, or examples."></textarea>
+          </div>
+        </div>
+
+        <!-- Index Page -->
+        <div class="page hidden" data-page-id="index">
+          <div class="page-section-title">Index</div>
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Monthly Index</div>
+              <div class="panel-sub">Link pages or notes</div>
+            </div>
+            <div class="grid-three">
+              <div>
+                <label class="field-label">Jan</label>
+                <textarea data-storage-key="index.jan"></textarea>
+              </div>
+              <div>
+                <label class="field-label">Feb</label>
+                <textarea data-storage-key="index.feb"></textarea>
+              </div>
+              <div>
+                <label class="field-label">Mar</label>
+                <textarea data-storage-key="index.mar"></textarea>
+              </div>
+              <div>
+                <label class="field-label">Apr</label>
+                <textarea data-storage-key="index.apr"></textarea>
+              </div>
+              <div>
+                <label class="field-label">May</label>
+                <textarea data-storage-key="index.may"></textarea>
+              </div>
+              <div>
+                <label class="field-label">Jun</label>
+                <textarea data-storage-key="index.jun"></textarea>
+              </div>
+              <div>
+                <label class="field-label">Jul</label>
+                <textarea data-storage-key="index.jul"></textarea>
+              </div>
+              <div>
+                <label class="field-label">Aug</label>
+                <textarea data-storage-key="index.aug"></textarea>
+              </div>
+              <div>
+                <label class="field-label">Sep</label>
+                <textarea data-storage-key="index.sep"></textarea>
+              </div>
+              <div>
+                <label class="field-label">Oct</label>
+                <textarea data-storage-key="index.oct"></textarea>
+              </div>
+              <div>
+                <label class="field-label">Nov</label>
+                <textarea data-storage-key="index.nov"></textarea>
+              </div>
+              <div>
+                <label class="field-label">Dec</label>
+                <textarea data-storage-key="index.dec"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-top:14px;">
+            <div class="panel-header">
+              <div class="panel-title">Notes</div>
+            </div>
+            <textarea data-storage-key="index.notes"></textarea>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Simple SPA navigation & scoped storage
+    const navItems = document.querySelectorAll('.nav-item');
+    const pages = document.querySelectorAll('.page');
+    const pageTitle = document.getElementById('pageTitle');
+    const monthPills = document.querySelectorAll('.month-pill');
+
+    const pageTitles = {
+      cover: 'Zen Planner',
+      yearly: 'Yearly Overview',
+      monthly: 'Monthly Planner',
+      weekly: 'Weekly Planner',
+      daily: 'Daily Planner',
+      notes: 'Notes & Cheat Sheets',
+      index: 'Index'
+    };
+
+    function setActivePage(pageId) {
+      navItems.forEach((item) => {
+        item.classList.toggle('active', item.getAttribute('data-page') === pageId);
+      });
+      pages.forEach((page) => {
+        page.classList.toggle('hidden', page.getAttribute('data-page-id') !== pageId);
+      });
+      pageTitle.textContent = pageTitles[pageId] || 'Zen Planner';
+
+      // when switching, reload current scope so the right entry appears
+      if (pageId === 'daily') reloadScope('daily');
+      if (pageId === 'weekly') reloadScope('weekly');
+      if (pageId === 'monthly') reloadScope('monthly');
+    }
+
+    navItems.forEach((item) => {
+      item.addEventListener('click', () => {
+        const pageId = item.getAttribute('data-page');
+        setActivePage(pageId);
+      });
+    });
+
+    // month pills are optional; if present, clicking them still just toggles active class
+    monthPills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        monthPills.forEach((p) => p.classList.remove('active'));
+        pill.classList.add('active');
+        reloadScope('monthly');
+      });
+    });
+
+    // Hour grids (04:00–03:00)
+    function generateHourGrid(containerId, prefixKey) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      const hours = [];
+      for (let h = 4; h < 24; h++) {
+        hours.push(h);
+      }
+      for (let h = 0; h < 4; h++) {
+        hours.push(h);
+      }
+      hours.forEach((h, index) => {
+        const hour12 = ((h + 11) % 12) + 1;
+        const ampm = h < 12 ? 'AM' : 'PM';
+        const label = `${hour12.toString().padStart(2, '0')}:00 ${ampm}`;
+        const labelDiv = document.createElement('div');
+        labelDiv.className = 'hour-label';
+        labelDiv.textContent = label;
+        const cellDiv = document.createElement('div');
+        cellDiv.className = 'hour-cell';
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.setAttribute('data-storage-key', `${prefixKey}.${index}`);
+        cellDiv.appendChild(input);
+        container.appendChild(labelDiv);
+        container.appendChild(cellDiv);
+      });
+    }
+
+    generateHourGrid('dailyHourGrid', 'day.hour');
+    generateHourGrid('weeklyHourGrid', 'week.hour');
+
+    // Local storage persistence
+    const STORAGE_PREFIX = 'zenPlanner.';
+
+    function getActiveMonthCode() {
+      // Prefer month from global date focus if available
+      const globalDate = document.getElementById('globalDateInput');
+      if (globalDate && globalDate.value && /^\d{4}-\d{2}-\d{2}$/.test(globalDate.value)) {
+        const monthIndex = parseInt(globalDate.value.slice(5, 7), 10) - 1;
+        const monthCodes = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+        if (!isNaN(monthIndex) && monthIndex >= 0 && monthIndex < monthCodes.length) {
+          return monthCodes[monthIndex];
+        }
+      }
+      const active = document.querySelector('.month-pill.active');
+      return active ? active.getAttribute('data-month') || 'GEN' : 'GEN';
+    }
+
+    function getCurrentYear() {
+      const globalDate = document.getElementById('globalDateInput');
+      if (globalDate && globalDate.value && /^\d{4}-\d{2}-\d{2}$/.test(globalDate.value)) {
+        return globalDate.value.slice(0, 4);
+      }
+      const yearInput = document.getElementById('globalYearInput');
+      const year = yearInput && yearInput.value ? yearInput.value.trim() : '';
+      return year || 'yyyy';
+    }
+
+    function getDayId() {
+      const globalDate = document.getElementById('globalDateInput');
+      const v = globalDate && globalDate.value ? globalDate.value : '';
+      return v || 'undated';
+    }
+
+    // Compute ISO week id (e.g. 2025-W49) from a yyyy-mm-dd string
+    function isoWeekIdFromDateStr(dateStr) {
+      if (!dateStr) return 'undatedWeek';
+      const d = new Date(dateStr + 'T00:00:00');
+      if (isNaN(d.getTime())) return 'undatedWeek';
+
+      // ISO week: Thursday-based week numbering
+      const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      const dayNum = (date.getUTCDay() + 6) % 7; // 0 = Monday
+      date.setUTCDate(date.getUTCDate() - dayNum + 3); // Thursday of this week
+      const firstThursday = new Date(Date.UTC(date.getUTCFullYear(), 0, 4));
+      const diff = date - firstThursday;
+      const week = 1 + Math.floor(diff / (7 * 24 * 60 * 60 * 1000));
+      const year = date.getUTCFullYear();
+      return `${year}-W${String(week).padStart(2, '0')}`;
+    }
+
+    // Compute a simple Mon–Sun date range string for the ISO week of a given date
+    function isoWeekRangeFromDateStr(dateStr) {
+      if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return '';
+      const d = new Date(dateStr + 'T00:00:00');
+      if (isNaN(d.getTime())) return '';
+
+      // find Monday of this week
+      const day = d.getDay(); // 0=Sun
+      const diffToMonday = (day === 0 ? -6 : 1) - day;
+      const monday = new Date(d);
+      monday.setDate(d.getDate() + diffToMonday);
+
+      const sunday = new Date(monday);
+      sunday.setDate(monday.getDate() + 6);
+
+      function fmt(x) {
+        const m = String(x.getMonth() + 1).padStart(2, '0');
+        const d2 = String(x.getDate()).padStart(2, '0');
+        return `${x.getFullYear()}-${m}-${d2}`;
+      }
+
+      return `${fmt(monday)} – ${fmt(sunday)}`;
+    }
+
+    function getWeekId() {
+      const globalDate = document.getElementById('globalDateInput');
+      const dailyDate = document.getElementById('daily-date');
+      const src = (globalDate && globalDate.value) || (dailyDate && dailyDate.value) || '';
+      return isoWeekIdFromDateStr(src);
+    }
+
+    // Compute week-of-month label (wk1–wk5) from yyyy-mm-dd
+    function weekOfMonthLabel(dateStr) {
+      if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return '';
+      const d = new Date(dateStr + 'T00:00:00');
+      if (isNaN(d.getTime())) return '';
+      const day = d.getDate();
+      const weekIndex = Math.floor((day - 1) / 7) + 1; // 1..5
+      return 'wk ' + weekIndex;
+    }
+
+    function getMonthId() {
+      const globalDate = document.getElementById('globalDateInput');
+      if (globalDate && globalDate.value && /^\d{4}-\d{2}-\d{2}$/.test(globalDate.value)) {
+        const year = globalDate.value.slice(0, 4);
+        const month = globalDate.value.slice(5, 7); // 01-12
+        return `${year}-${month}`;
+      }
+      // Fallback to year + active month code
+      const year = getCurrentYear();
+      const code = getActiveMonthCode();
+      return `${year}-${code}`;
+    }
+
+    function scopeInfoForElement(el) {
+      const page = el.closest('.page');
+      if (!page) return { scope: 'global', id: 'global' };
+      const pageId = page.getAttribute('data-page-id');
+      if (pageId === 'daily') return { scope: 'daily', id: getDayId() };
+      if (pageId === 'weekly') return { scope: 'weekly', id: getWeekId() };
+      if (pageId === 'monthly') return { scope: 'monthly', id: getMonthId() };
+      if (pageId === 'yearly') return { scope: 'yearly', id: getCurrentYear() };
+      return { scope: 'global', id: 'global' };
+    }
+
+    function storageKeyFor(el) {
+      const key = el.getAttribute('data-storage-key');
+      if (!key) return null;
+      const { scope, id } = scopeInfoForElement(el);
+      // Example: zenPlanner.daily:2025-04-01:day.focus
+      return `${STORAGE_PREFIX}${scope}:${id}:${key}`;
+    }
+
+    function loadField(el) {
+      const key = storageKeyFor(el);
+      if (!key) return;
+      const stored = localStorage.getItem(key);
+      if (stored === null) return;
+
+      if (el.type === 'checkbox') {
+        el.checked = stored === 'true';
+      } else {
+        el.value = stored;
+      }
+    }
+
+    function saveField(el) {
+      const key = storageKeyFor(el);
+      if (!key) return;
+      if (el.type === 'checkbox') {
+        localStorage.setItem(key, el.checked ? 'true' : 'false');
+      } else {
+        localStorage.setItem(key, el.value ?? '');
+      }
+    }
+
+    function initPersistence() {
+      const fields = document.querySelectorAll('[data-storage-key]');
+      fields.forEach((el) => {
+        loadField(el);
+        el.addEventListener('change', () => saveField(el));
+        el.addEventListener('input', () => saveField(el));
+      });
+    }
+
+    // Reload fields in a specific scope (daily/weekly/monthly/yearly) when the context changes
+    function reloadScope(scope) {
+      let selector = '';
+      if (scope === 'daily') selector = '.page[data-page-id="daily"] [data-storage-key]';
+      if (scope === 'weekly') selector = '.page[data-page-id="weekly"] [data-storage-key]';
+      if (scope === 'monthly') selector = '.page[data-page-id="monthly"] [data-storage-key]';
+      if (scope === 'yearly') selector = '.page[data-page-id="yearly"] [data-storage-key]';
+      if (!selector) return;
+
+      const fields = document.querySelectorAll(selector);
+      fields.forEach((el) => {
+        // clear current value then load from the new scoped key
+        if (el.type === 'checkbox') {
+          el.checked = false;
+        } else {
+          el.value = '';
+        }
+        loadField(el);
+      });
+    }
+
+    // Mirror global date into other context helpers (year field, daily date, month pill)
+    function syncFromGlobalDate() {
+      const dateInput = document.getElementById('globalDateInput');
+      if (!dateInput || !dateInput.value || !/^\d{4}-\d{2}-\d{2}$/.test(dateInput.value)) return;
+
+      const value = dateInput.value; // yyyy-mm-dd
+      const parts = value.split('-');
+      const year = parts[0];
+      const monthIndex = parseInt(parts[1], 10) - 1;
+
+      // Sync year field
+      const yearInput = document.getElementById('globalYearInput');
+      if (yearInput) {
+        yearInput.value = year;
+        localStorage.setItem(STORAGE_PREFIX + 'globalField:globalYearInput', year);
+      }
+
+      // Sync daily date field
+      const dailyDate = document.getElementById('daily-date');
+      if (dailyDate) {
+        dailyDate.value = value;
+      }
+
+      // Sync weekly week-of-month label and date range
+      const weeklyLabel = document.getElementById('weeklyWeekLabel');
+      if (weeklyLabel) {
+        weeklyLabel.textContent = weekOfMonthLabel(value); // e.g. 'wk 3'
+      }
+      const weeklyRangeLabel = document.getElementById('weeklyRangeLabel');
+      if (weeklyRangeLabel) {
+        weeklyRangeLabel.textContent = isoWeekRangeFromDateStr(value);
+      }
+
+      // Sync monthly header name
+      const monthNameDisplay = document.getElementById('monthNameDisplay');
+      if (monthNameDisplay) {
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        if (!isNaN(monthIndex) && monthIndex >= 0 && monthIndex < 12) {
+          monthNameDisplay.value = `${monthNames[monthIndex]} ${year}`;
+        }
+      }
+    }
+
+    // Global date/year persistence (these are global-scope fields)
+    function initGlobalFields() {
+      const yearInput = document.getElementById('globalYearInput');
+      const dateInput = document.getElementById('globalDateInput');
+      [yearInput, dateInput].forEach((el) => {
+        if (!el) return;
+        // use a simple, non-scoped key for these
+        const key = STORAGE_PREFIX + 'globalField:' + el.id;
+        const stored = localStorage.getItem(key);
+        if (stored) {
+          el.value = stored;
+        }
+        el.addEventListener('change', () => {
+          localStorage.setItem(key, el.value ?? '');
+          if (el.id === 'globalDateInput') {
+            syncFromGlobalDate();
+          }
+          // changing global date/year may affect current scopes
+          reloadScope('daily');
+          reloadScope('weekly');
+          reloadScope('monthly');
+          reloadScope('yearly');
+        });
+        el.addEventListener('input', () => {
+          localStorage.setItem(key, el.value ?? '');
+        });
+      });
+
+      // Initial sync if a date was already stored
+      syncFromGlobalDate();
+    }
+
+    function initScopeWatchers() {
+      const dailyDate = document.getElementById('daily-date');
+      if (dailyDate) {
+        dailyDate.addEventListener('change', () => reloadScope('daily'));
+      }
+
+      // week context now follows the date, so changes are triggered via global date
+
+      const monthName = document.querySelector('[data-storage-key="month.name"]');
+      if (monthName) {
+        monthName.addEventListener('change', () => reloadScope('monthly'));
+      }
+    }
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      setActivePage('cover');
+      initPersistence();
+      initGlobalFields();
+      initScopeWatchers();
+    });
+  </script>
+</body>
+</html>
